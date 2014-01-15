@@ -91,26 +91,21 @@ class PCOWhatWeAreSinging {
 	static private function queryForSongs(&$api, $serviceType) {
 		// pick the Sundays to check
 		$sundaysToCheck = array();
-		// $today = date('w');
-		// $hour = date('G');
-
-		$sundaysToCheck[] = strtotime('-2 Sunday');
-		$sundaysToCheck[] = strtotime('last Sunday');
-
-		// Don't expose future service plans publically
-		// if ((1 <= $today && $today <= 3)
-		// || ($today == 4 && $hour < 13)) { // if today is Monday through Thursday @ 1pm
-		// 	// get previous two Sundays
-		// 	$sundaysToCheck[] = strtotime('-2 Sunday');
-		// 	$sundaysToCheck[] = strtotime('last Sunday');
-		// } else { // today is Thursday @ 1pm through Sunday
-		// 	// get previous Sunday and this Sunday
-		// 	$sundaysToCheck[] = strtotime('last Sunday');
-		// 	if ($today == 0)
-		// 		$sundaysToCheck[] = strtotime('today');
-		// 	else
-		// 		$sundaysToCheck[] = strtotime('next Sunday');
-		// }
+		$today = date('w');
+		$hour = date('G');
+		if ((1 <= $today && $today <= 3)
+		|| ($today == 4 && $hour < 13)) { // if today is Monday through Thursday @ 1pm
+			// get previous two Sundays
+			$sundaysToCheck[] = strtotime('-2 Sunday');
+			$sundaysToCheck[] = strtotime('last Sunday');
+		} else { // today is Thursday @ 1pm through Sunday
+			// get previous Sunday and this Sunday
+			$sundaysToCheck[] = strtotime('last Sunday');
+			if ($today == 0)
+				$sundaysToCheck[] = strtotime('today');
+			else
+				$sundaysToCheck[] = strtotime('next Sunday');
+		}
 		
 		// get all adult service plans from PCO
 		$plans = $api->getPlansByServiceId($serviceType, true);
